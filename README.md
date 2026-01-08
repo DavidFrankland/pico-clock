@@ -4,7 +4,7 @@ A Raspberry Pi Pico clock which displays the time on a a [Silicon Craft](https:/
 
 Various transitions are available which make the display more interesting.
 
-The choice of components was based more on what was at hand, rather than personal choice. The LED display was found in our local Maker Space - [Otley MAKER SPACE](otleymakerspace.co.uk) - and nobody seemed to want it, so it was put to use.
+The choice of components was based more on what was at hand, rather than personal choice. The LED display was found in our local Maker Space - [Otley MAKER SPACE](https://otleymakerspace.co.uk/) - and nobody seemed to want it, so it was put to use.
 
 ## Requirements
 
