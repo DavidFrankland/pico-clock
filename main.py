@@ -3,10 +3,21 @@ import machine
 
 import clock
 import siliconcraft_display
+from siliconcraft_display import Segments, digits, Letters
 import network_utils
 
 uart = machine.UART(0, baudrate=38400, tx=machine.Pin(16))
 display = siliconcraft_display.Display(uart, 255)
+
+# display startup animation
+chars = [
+    0, 0, 0, 0, 0, 0,
+    Letters.p, Letters.i, Letters.c, Letters.o, 0, Letters.c, Letters.l, Letters.o, Letters.c, Letters.k,
+    0, 0, 0, 0, 0, 0
+]
+for i in range(0, len(chars)-5):
+    display.write_bytes(chars[i:i+6])
+    time.sleep(0.25)
 
 # display.toggle_brightness()
 # time.sleep(1)

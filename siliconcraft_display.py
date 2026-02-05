@@ -15,6 +15,7 @@ class Segments:
     """
     Single segment bitmaps.
     """
+    #     fcgb.eda
     a = 0b00000001
     b = 0b00010000
     c = 0b01000000
@@ -29,14 +30,24 @@ class Letters:
     """
     Bitmaps for some letters that can be reasonably represented on a 7 segment display.
     """
+    #     fcgb.eda
     a = 0b01110111
     c = 0b00100110
     e = 0b10110111
+    i = 0b00000100
+    l = 0b10000100
+    k = 0b11100101
     n = 0b01100100
+    o = 0b01100110
     p = 0b10110101
     s = 0b11100011
     t = 0b10100110
-
+    P = 0b10110101
+    I = 0b10000100
+    C = 0b10000111
+    O = 0b11010111
+    L = 0b10000110
+    K = 0b11100101
 
 # segment bitmaps for the 0-9 digits
 digits = [
