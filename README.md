@@ -10,7 +10,7 @@ The choice of components was based more on what was at hand, rather than persona
 
 ### Hardware
 
-- Raspberry Pi Pico (1 or 2), with wifi or without<br>
+- Raspberry Pi Pico W (1 or 2) with wifi
 - Silicon Craft SC6Dlite LED display
 - breadboard, wires
 
@@ -42,13 +42,22 @@ uart = machine.UART(0, baudrate=38400, tx=machine.Pin(16))
 ## How to
 
 - Wire it up
-- Upload [clock.py](clock.py) and [siliconcraft_display.py](siliconcraft_display.py) to the Pi Pico
-- Sync RTC
-- run [main.py](main.py)
+- Rename `wifi_credentials.example.py` to `wifi_credentials.py`
+- Amend the SSID and password values in `wifi_credentials.py` for your network(s)
+
+For debugging with VS Code:
+
+- Upload all the `.py` files *except `main.py`* to the Pi Pico
+- Run `main.py` within VS Code
+
+For a standalone clock:
+
+- Upload all the `.py` files to the Pi Pico
+- Disconnect the Pi Pico from your PC
+- Reset the Pi Pico
 
 ## To do
 
-- improve "How to" instructions
 - add FreeCAD 3D file for breadboard stand
-- wifi version (NTP, web interface)
+- web interface
 - add photos and videos
