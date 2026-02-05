@@ -2,43 +2,10 @@ import time
 import random
 
 import siliconcraft_display
-
-#  ───a───
-# │       │
-# f       b
-# │       │
-#  ───g───
-# │       │
-# e       c
-# │       │
-#  ───d───  p
-
-# segment bit maps for the 0-9 digits
-digits = [
-    # fcgb.eda
-    0b11010111,  # 0
-    0b01010000,  # 1
-    0b00110111,  # 2
-    0b01110011,  # 3
-    0b11110000,  # 4
-    0b11100011,  # 5
-    0b11100111,  # 6
-    0b01010001,  # 7
-    0b11110111,  # 8
-    0b11110011,  # 9
-]
-
-segment_a = 0b00000001
-segment_b = 0b00010000
-segment_c = 0b01000000
-segment_d = 0b00000010
-segment_e = 0b00000100
-segment_f = 0b10000000
-segment_g = 0b00100000
-segment_p = 0b00001000
+from siliconcraft_display import Segments, digits
 
 # all the digit segments in a list for shuffling
-digit_segments = [segment_a, segment_b, segment_c, segment_d, segment_e, segment_f, segment_g]
+digit_segments = [Segments.a, Segments.b, Segments.c, Segments.d, Segments.e, Segments.f, Segments.g]
 
 
 class Style():
@@ -149,7 +116,7 @@ class Display:
         self.display.write_bytes(self.display_bytes)
 
     def _cycle_transition(self):
-        patterns = [segment_b, segment_c, segment_d, segment_e, segment_f, segment_a]
+        patterns = [Segments.b, Segments.c, Segments.d, Segments.e, Segments.f, Segments.a]
         temp_bytes = self.display_bytes.copy()
         animation_duration = 0.4
         steps = len(patterns)
@@ -165,7 +132,7 @@ class Display:
         self.display.write_bytes(self.display_bytes)
 
     def _wipe_down_transition(self):
-        patterns = [segment_a, segment_g, segment_d]
+        patterns = [Segments.a, Segments.g, Segments.d]
         temp_bytes = self.display_bytes.copy()
         animation_duration = 0.25
         steps = len(patterns)
@@ -205,8 +172,8 @@ class Display:
 
     def _blink_transition(self, display_segment_g: bool):
         temp_bytes = self.display_bytes.copy()
-        old_segment_masks = [segment_b | segment_c | segment_e | segment_f | segment_g, segment_g, 0, 0]
-        new_segment_masks = [0, 0, segment_g, segment_b | segment_c | segment_e | segment_f | segment_g]
+        old_segment_masks = [Segments.b | Segments.c | Segments.e | Segments.f | Segments.g, Segments.g, 0, 0]
+        new_segment_masks = [0, 0, Segments.g, Segments.b | Segments.c | Segments.e | Segments.f | Segments.g]
         animation_duration = 0.3
         delay = animation_duration / len(old_segment_masks)
         for i in range(0, len(old_segment_masks)):
@@ -215,7 +182,7 @@ class Display:
                     d = self.prev_display_bytes[digit] & old_segment_masks[i]
                     d |= self.display_bytes[digit] & new_segment_masks[i]
                     if display_segment_g:
-                        d |= segment_g
+                        d |= Segments.g
                     temp_bytes[digit] = d
             clear_decimal_points(temp_bytes)
             self.display.write_bytes(temp_bytes)
