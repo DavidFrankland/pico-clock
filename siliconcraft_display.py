@@ -12,6 +12,9 @@ from machine import UART
 
 
 class Segments:
+    """
+    Single segment bitmaps.
+    """
     a = 0b00000001
     b = 0b00010000
     c = 0b01000000
@@ -21,7 +24,21 @@ class Segments:
     g = 0b00100000
     p = 0b00001000
 
-# segment bit maps for the 0-9 digits
+
+class Letters:
+    """
+    Bitmaps for some letters that can be reasonably represented on a 7 segment display.
+    """
+    a = 0b01110111
+    c = 0b00100110
+    e = 0b10110111
+    n = 0b01100100
+    p = 0b10110101
+    s = 0b11100011
+    t = 0b10100110
+
+
+# segment bitmaps for the 0-9 digits
 digits = [
     # fcgb.eda
     0b11010111,  # 0

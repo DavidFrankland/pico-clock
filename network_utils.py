@@ -3,6 +3,7 @@ import time
 import ntptime
 
 import siliconcraft_display
+from siliconcraft_display import Segments, Letters
 import wifi_credentials
 
 
@@ -17,11 +18,7 @@ class NetworkHelper:
     def connect(self):
         wlan = self.wlan
         print('scanning for networks: ', end='')
-        s = 0b11100011
-        c = 0b00100110
-        a = 0b01110111
-        n = 0b01100100
-        self.display.write_bytes([s, c, a, n, 0, 0])
+        self.display.write_bytes([Letters.s, Letters.c, Letters.a, Letters.n, 0, 0])
         time.sleep(0.1)
         networks = wlan.scan()
         print(f'found {len(networks)} networks')
@@ -41,7 +38,7 @@ class NetworkHelper:
             wlan.connect(known_ssid, known_password)
             timeout = 10
             start_time = time.time()
-            spinner_segments = [0b00100000, 0b01000000, 0b00000010, 0b00000100]
+            spinner_segments = [Segments.g, Segments.c, Segments.d, Segments.e]
             spinner_index = 0
             while not wlan.isconnected():
                 if time.time() - start_time > timeout:
@@ -49,10 +46,7 @@ class NetworkHelper:
                     print(f'connection to {found_ssid} timed out')
                     break
                 print(end='.')
-                n = 0b01100100
-                e = 0b10110111
-                t = 0b10100110
-                self.display.write_bytes([n, e, t, 0, 0, spinner_segments[spinner_index]])
+                self.display.write_bytes([Letters.n, Letters.e, Letters.t, 0, 0, spinner_segments[spinner_index]])
                 spinner_index = (spinner_index + 1) % len(spinner_segments)
                 time.sleep(0.1)
             print()
@@ -64,8 +58,7 @@ class NetworkHelper:
             print(f'connected to {found_ssid}')
         else:
             print('could not connect to any known network')
-            segment_g = 0b00100000
-            self.display.write_bytes([segment_g, segment_g, segment_g, segment_g, segment_g, segment_g])
+            self.display.write_bytes([Segments.g, Segments.g, Segments.g, Segments.g, Segments.g, Segments.g])
             time.sleep(0.1)
 
     @property
@@ -76,10 +69,7 @@ class NetworkHelper:
         if not self.connected:
             self.connect()
         print('syncing time')
-        n = 0b01100100
-        t = 0b10100110
-        p = 0b10110101
-        self.display.write_bytes([n, t, p, 0, 0, 0])
+        self.display.write_bytes([Letters.n, Letters.t, Letters.p, 0, 0, 0])
         time.sleep(0.1)
         ok = False
         while not ok:
