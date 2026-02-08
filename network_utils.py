@@ -55,7 +55,7 @@ class NetworkHelper:
             if wlan.isconnected():
                 break
         if wlan.isconnected():
-            print(f'connected to {found_ssid}')
+            print(f'connected to {found_ssid}: {self.ip_address}')
         else:
             print('could not connect to any known network')
             self.display.write_bytes([Segments.g, Segments.g, Segments.g, Segments.g, Segments.g, Segments.g])
@@ -64,6 +64,10 @@ class NetworkHelper:
     @property
     def connected(self):
         return self.wlan.isconnected()
+
+    @property
+    def ip_address(self):
+        return self.wlan.ifconfig()[0]
 
     def sync_time(self):
         if not self.connected:

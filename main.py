@@ -19,7 +19,7 @@ display.scroll_bytes(startup_message_bytes)
 
 network_helper = network_utils.NetworkHelper(display)
 network_helper.connect()
-ip_address = network_helper.wlan.ifconfig()[0]
+ip_address = network_helper.ip_address
 print(ip_address)
 ip_address_bytes = []
 for char in ip_address:
