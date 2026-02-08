@@ -10,21 +10,24 @@ uart = machine.UART(0, baudrate=38400, tx=machine.Pin(16))
 display = siliconcraft_display.Display(uart, 255)
 
 # display startup animation
-chars = [
-    0, 0, 0, 0, 0, 0,
-    Letters.p, Letters.i, Letters.c, Letters.o, 0, Letters.c, Letters.l, Letters.o, Letters.c, Letters.k,
-    0, 0, 0, 0, 0, 0
-]
-for i in range(0, len(chars)-5):
-    display.write_bytes(chars[i:i+6])
-    time.sleep(0.25)
+startup_message_bytes = [Letters.p, Letters.i, Letters.c, Letters.o, 0,
+                         Letters.c, Letters.l, Letters.o, Letters.c, Letters.k]
+display.scroll_bytes(startup_message_bytes)
 
 # display.toggle_brightness()
 # time.sleep(1)
 
 network_helper = network_utils.NetworkHelper(display)
 network_helper.connect()
-print(network_helper.wlan.ifconfig())
+ip_address = network_helper.wlan.ifconfig()[0]
+print(ip_address)
+ip_address_bytes = []
+for char in ip_address:
+    if char == '.':
+        ip_address_bytes.append(Segments.p)
+    else:
+        ip_address_bytes.append(digits[int(char)])
+display.scroll_bytes(ip_address_bytes)
 network_helper.sync_time()
 
 my_clock = clock.Display(display)

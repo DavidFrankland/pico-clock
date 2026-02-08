@@ -1,4 +1,5 @@
 from machine import UART
+import time
 
 #  ───a───
 # │       │
@@ -49,6 +50,7 @@ class Letters:
     L = 0b10000110
     K = 0b11100101
 
+
 # segment bitmaps for the 0-9 digits
 digits = [
     # fcgb.eda
@@ -76,11 +78,20 @@ class Display:
 
     def write_bytes(self, display_bytes: list[int]):
         """
-        Send the individual digit segment data to the display.
+        Send the individual character segment data to the display.
         """
         self.uart.write(bytes([self.id]))
         self.uart.write(bytes('a', 'utf-8'))
         self.uart.write(bytes(display_bytes))
+
+    def scroll_bytes(self, message_bytes: list[int]):
+        """
+        Scroll the message across the display.
+        """
+        message_bytes = [0, 0, 0, 0, 0, 0] + message_bytes + [0, 0, 0, 0, 0, 0]
+        for i in range(0, len(message_bytes)-5):
+            self.write_bytes(message_bytes[i:i+6])
+            time.sleep(0.25)
 
     def clear(self):
         """
