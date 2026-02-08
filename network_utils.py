@@ -16,12 +16,15 @@ class NetworkHelper:
         self.display = display
 
     def connect(self):
-        wlan = self.wlan
+        if self.connected:
+            print(f'already connected: {self.ip_address}')
+            return
         print('scanning for networks: ', end='')
         self.display.write_bytes([Letters.s, Letters.c, Letters.a, Letters.n, 0, 0])
         time.sleep(0.1)
-        networks = wlan.scan()
-        print(f'found {len(networks)} networks')
+        networks = self.wlan.scan()
+        print(f'found {len(networks)} networks: ', end='')
+        print(', '.join([network[0].decode() for network in networks]))
         for network in networks:
             found_ssid = network[0].decode()
             print(f'{found_ssid}: ', end='')
@@ -35,12 +38,12 @@ class NetworkHelper:
                 print('not known')
                 continue
             print('trying to connect', end='')
-            wlan.connect(known_ssid, known_password)
+            self.wlan.connect(known_ssid, known_password)
             timeout = 10
             start_time = time.time()
             spinner_segments = [Segments.g, Segments.c, Segments.d, Segments.e]
             spinner_index = 0
-            while not wlan.isconnected():
+            while not self.connected:
                 if time.time() - start_time > timeout:
                     print()
                     print(f'connection to {found_ssid} timed out')
@@ -52,9 +55,9 @@ class NetworkHelper:
             print()
             self.display.clear()
             time.sleep(0.1)
-            if wlan.isconnected():
+            if self.connected:
                 break
-        if wlan.isconnected():
+        if self.connected:
             print(f'connected to {found_ssid}: {self.ip_address}')
         else:
             print('could not connect to any known network')
@@ -72,6 +75,8 @@ class NetworkHelper:
     def sync_time(self):
         if not self.connected:
             self.connect()
+        if not self.connected:
+            return
         print('syncing time')
         self.display.write_bytes([Letters.n, Letters.t, Letters.p, 0, 0, 0])
         time.sleep(0.1)
