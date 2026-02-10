@@ -8,15 +8,15 @@ from siliconcraft_display import Segments, digits
 digit_segments = [Segments.a, Segments.b, Segments.c, Segments.d, Segments.e, Segments.f, Segments.g]
 
 
-class Style():
-    instant = 1
-    glitch = 2
-    blank = 3
-    cycle = 4
-    wipe_down = 5
-    dissolve = 6
-    blink1 = 7
-    blink2 = 8
+class TransitionStyle():
+    none = 0
+    glitch = 1
+    blank = 2
+    cycle = 3
+    wipe_down = 4
+    dissolve = 5
+    blink1 = 6
+    blink2 = 7
 
 
 def set_decimal_points(bytes: list[int]):
@@ -42,42 +42,39 @@ class Display:
     Displays the time on the LED display, with various transition styles.
     """
 
-    def __init__(self, siliconcraft_display: siliconcraft_display.Display, style=Style.instant):
+    def __init__(self, siliconcraft_display: siliconcraft_display.Display, transition_style=TransitionStyle.none):
         self.display = siliconcraft_display
         self.prev_display_bytes = [0] * 6
         self.display_bytes = [0] * 6
-        self.style = style
-
-    def set_transition_style(self, style: int):
-        self.style = style
+        self.transition_style = transition_style
 
     def show_time(self, time_string: str):
         for i in range(0, 6):
             self.display_bytes[i] = digits[int(time_string[i])]
 
-        if self.style == Style.instant:
-            self._instant_transition()
-        elif self.style == Style.glitch:
+        if self.transition_style == TransitionStyle.none:
+            self._no_transition()
+        elif self.transition_style == TransitionStyle.glitch:
             self._glitch_transition()
-        elif self.style == Style.blank:
+        elif self.transition_style == TransitionStyle.blank:
             self._blank_transition()
-        elif self.style == Style.cycle:
+        elif self.transition_style == TransitionStyle.cycle:
             self._cycle_transition()
-        elif self.style == Style.wipe_down:
+        elif self.transition_style == TransitionStyle.wipe_down:
             self._wipe_down_transition()
-        elif self.style == Style.dissolve:
+        elif self.transition_style == TransitionStyle.dissolve:
             self._dissolve_transition()
-        elif self.style == Style.blink1:
+        elif self.transition_style == TransitionStyle.blink1:
             self._blink1_transition()
-        elif self.style == Style.blink2:
+        elif self.transition_style == TransitionStyle.blink2:
             self._blink2_transition()
         else:
-            raise ValueError(f'Unknown transition style: {self.style}')
+            raise ValueError(f'Unknown transition style: {self.transition_style}')
 
         clear_decimal_points(self.display_bytes)
         self.prev_display_bytes = self.display_bytes.copy()
 
-    def _instant_transition(self):
+    def _no_transition(self):
         set_decimal_points(self.display_bytes)
         self.display.write_bytes(self.display_bytes)
         time.sleep(0.5)

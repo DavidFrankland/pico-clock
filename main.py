@@ -34,10 +34,9 @@ my_clock = clock.Display(display)
 old_time = (0, 0, 0, 0, 0, 0, 0, 0)
 current_time = old_time
 
-style: int = clock.Style.cycle
-my_clock.set_transition_style(style)
-num_effects = 8
-cycle_effects = False
+my_clock.transition_style = clock.TransitionStyle.none
+num_transitions = 8
+cycle_transitions = True
 
 try:
     while True:
@@ -48,11 +47,10 @@ try:
         year, month, day, hour, minute, second, weekday, yearday = current_time
         time_string = f'{hour:02}{minute:02}{second:02}'
         my_clock.show_time(time_string)
-        if cycle_effects:
+        if cycle_transitions:
             if second % 10 == 0:
-                style = (style % num_effects) + 1
-                print(f'Switching to effect style {style}')
-                my_clock.set_transition_style(style)
+                my_clock.transition_style = (my_clock.transition_style + 1) % num_transitions
+                print(f'switching to effect style {my_clock.transition_style}')
 except KeyboardInterrupt:
     display.clear()
-    print('Program stopped by user')
+    print('program stopped by user')
