@@ -49,7 +49,7 @@ class NetworkHelper:
                     print(f'connection to {found_ssid} timed out')
                     break
                 print(end='.')
-                self.display.write_bytes([Letters.n, Letters.e, Letters.t, 0, 0, spinner_segments[spinner_index]])
+                self.display.write_bytes([Letters.c, Letters.o, Letters.n, Letters.n, 0, spinner_segments[spinner_index]])
                 spinner_index = (spinner_index + 1) % len(spinner_segments)
                 time.sleep(0.1)
             print()
