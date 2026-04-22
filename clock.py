@@ -8,7 +8,7 @@ from siliconcraft_display import Segments, digits
 digit_segments = [Segments.a, Segments.b, Segments.c, Segments.d, Segments.e, Segments.f, Segments.g]
 
 
-class TransitionStyle():
+class TransitionStyle:
     none = 0
     glitch = 1
     blank = 2
@@ -21,8 +21,8 @@ class TransitionStyle():
 
 def set_decimal_points(bytes: list[int]):
     clear_decimal_points(bytes)
-    bytes[1] |= 0b00001000
-    bytes[3] |= 0b00001000
+    bytes[1] |= Segments.p
+    bytes[3] |= Segments.p
 
 
 def clear_decimal_points(bytes: list[int]):
@@ -31,8 +31,8 @@ def clear_decimal_points(bytes: list[int]):
 
 
 def shuffle_digit_segments():
-    n = len(digit_segments)
-    for i in range(n - 1, 0, -1):
+    # Fisher–Yates shuffle (forward variant)
+    for i in range(1, len(digit_segments)):
         j = random.randint(0, i)
         digit_segments[i], digit_segments[j] = digit_segments[j], digit_segments[i]
 
