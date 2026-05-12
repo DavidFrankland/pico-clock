@@ -10,6 +10,7 @@ uart = machine.UART(0, baudrate=38400, tx=machine.Pin(16))
 display = siliconcraft_display.Display(uart, 255)
 
 # display startup animation
+print('startup banner')
 startup_message_bytes = [Letters.p, Letters.i, Letters.c, Letters.o, 0,
                          Letters.c, Letters.l, Letters.o, Letters.c, Letters.k]
 display.scroll_bytes(startup_message_bytes)
@@ -47,6 +48,8 @@ try:
         year, month, day, hour, minute, second, weekday, yearday = current_time
         time_string = f'{hour:02}{minute:02}{second:02}'
         my_clock.show_time(time_string)
+        if hour == 4 and minute == 0 and second == 0:
+            network_helper.sync_time()
         if cycle_transitions:
             if second % 10 == 0:
                 my_clock.transition_style = (my_clock.transition_style + 1) % num_transitions
