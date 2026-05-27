@@ -5,6 +5,7 @@ import clock
 import siliconcraft_display
 from siliconcraft_display import Segments, digits, Letters
 import network_utils
+import time_utils
 
 uart = machine.UART(0, baudrate=38400, tx=machine.Pin(16))
 display = siliconcraft_display.Display(uart, 255)
@@ -32,20 +33,20 @@ display.scroll_bytes(ip_address_bytes)
 network_helper.sync_time()
 
 my_clock = clock.Display(display)
-old_time = (0, 0, 0, 0, 0, 0, 0, 0)
+old_time = 0
 current_time = old_time
 
-my_clock.transition_style = clock.TransitionStyle.none
+my_clock.transition_style = clock.TransitionStyle.blink1
 num_transitions = 8
-cycle_transitions = True
+cycle_transitions = False
 
 try:
     while True:
         while current_time == old_time:
             machine.idle()
-            current_time = time.localtime()
+            current_time = time.time()
         old_time = current_time
-        year, month, day, hour, minute, second, weekday, yearday = current_time
+        year, month, day, hour, minute, second, weekday, yearday = time_utils.localtime()
         time_string = f'{hour:02}{minute:02}{second:02}'
         my_clock.show_time(time_string)
         if hour == 4 and minute == 0 and second == 0:
