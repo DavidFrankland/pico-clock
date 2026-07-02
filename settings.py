@@ -1,5 +1,8 @@
 import clock
 
+# whether to wait for LED display to initialise
+wait_on_boot = True
+
 # whether to display the "pico clock" startup banner
 display_startup_animation = True
 

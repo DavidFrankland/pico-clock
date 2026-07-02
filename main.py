@@ -11,6 +11,9 @@ import settings
 uart = machine.UART(0, baudrate=38400, tx=machine.Pin(16))
 display = siliconcraft_display.Display(uart, 255)
 
+if settings.wait_on_boot:
+    time.sleep(4)
+
 if settings.display_startup_animation:
     print('startup banner')
     startup_message_bytes = [Letters.p, Letters.i, Letters.c, Letters.o, 0,
