@@ -4,21 +4,37 @@ import time
 # import datetime
 # We have to handle our own time zone.
 
+old_year = 0
+bst_start = 0
+bst_end = 0
+
 
 def localtime():
+    global old_year, bst_start, bst_end
     # get UTC time components
     year, month, day, hour, minute, second, weekday, yearday = time.gmtime()
+    if year != old_year:
+        old_year = year
+        bst_start = last_sunday_in_march(year)
+        print(f'BST starts {format_time(bst_start)} UTC')
+        bst_end = last_sunday_in_october(year)
+        print(f'BST ends {format_time(bst_end)} UTC')
 
     # calculate offset for BST/GMT
-    # get last Sunday in March / October for the current year
     seconds_since_epoch = time.time()
-    if seconds_since_epoch >= last_sunday_in_march(year) and seconds_since_epoch < last_sunday_in_october(year):
+    if seconds_since_epoch >= bst_start and seconds_since_epoch < bst_end:
         time_zone_offset = 3600
     else:
         time_zone_offset = 0
 
     # return UTC + offset
     return time.gmtime(time.time() + time_zone_offset)
+
+
+def format_time(secs: int) -> str:
+    month_names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    year, month, day, hour, minute, second, weekday, yearday = time.gmtime(secs)
+    return f'{day} {month_names[month]} {year} {hour:02}:{minute:02}:{second:02}'
 
 
 def last_sunday_in_march(year: int) -> int:
