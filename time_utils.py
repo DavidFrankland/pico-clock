@@ -28,7 +28,7 @@ def localtime():
         time_zone_offset = 0
 
     # return UTC + offset
-    return time.gmtime(time.time() + time_zone_offset)
+    return time.gmtime(seconds_since_epoch + time_zone_offset)
 
 
 def format_time(secs: int) -> str:
